@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tugasprak/about_page.dart';
-import 'package:tugasprak/home_page.dart';
+import 'package:tokokita/about_page.dart';
+import 'package:tokokita/home_page.dart';
 
 class Sidemenu extends StatelessWidget {
   const Sidemenu({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugasprak/login_page.dart';
+import 'package:tokokita/ui/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +11,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Menu',
+      title: 'Toko Kita',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: false,
         primarySwatch: Colors.blue,
@@ -21,12 +22,6 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
           iconTheme: IconThemeData(color: Colors.white),
           elevation: 4,
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-          ),
         ),
       ),
       home: const LoginPage(),
