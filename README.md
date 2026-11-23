@@ -187,3 +187,92 @@ flutter run
 
 ### Kesimpulan Praktikum
 Pertemuan keempat memberikan pemahaman menyeluruh tentang integrasi sistem client-server, perancangan RESTful API menggunakan framework CodeIgniter 4, perancangan basis data relasional untuk sistem autentikasi dan inventaris, pemetaan data JSON ke model Dart, penerapan validasi form komposit pada Flutter, serta perancangan antarmuka mobile multi-halaman untuk alur operasi CRUD (Create, Read, Update, Delete) yang dinamis dan terstruktur.
+
+## 📝 Tugas Pertemuan 5: CRUD Module Flutter Bagian 2 (Helper, BLoC, HTTP Request, & Full REST API Integration)
+**Tanggal:** Rabu, 18 November 2026
+
+### Deskripsi Teknis & Non-Teknis
+- **Non-Teknis:** Mengimplementasikan pola arsitektur BLoC (Business Logic Component) dan lapisan Helper untuk memisahkan logika bisnis dari lapisan antarmuka pengguna (UI). Mengintegrasikan aplikasi Flutter secara penuh dengan backend RESTful API untuk mendukung autentikasi sesi berkelanjutan (token session), penanganan kesalahan jaringan (Exception Handling) secara terpusat, serta alur operasi CRUD produk yang terhubung langsung ke basis data server.
+- **Teknis:**
+  - **Manajemen Ketergantungan (Dependencies):**
+    - Menambahkan package `http` pada `pubspec.yaml` untuk menangani protokol HTTP/REST request ke server.
+    - Mempertahankan package `shared_preferences` untuk penyimpanan persisten token autentikasi dan ID pengguna.
+  - **Lapisan Helper (`lib/helpers/`):**
+    - `user_info.dart`: Menyediakan fungsi asinkronus untuk menyimpan, membaca, dan menghapus sesi pengguna (`setToken`, `getToken`, `setUserID`, `getUserID`, dan `logout`).
+    - `app_exception.dart`: Membuat kelas penanganan eksepsi bertingkat (`AppException`, `FetchDataException`, `BadRequestException`, `UnauthorisedException`, `InvalidInputException`) untuk menangkap dan mengklasifikasikan error HTTP status code secara spesifik.
+    - `api.dart`: Membangun modul HTTP client reusable (`post`, `get`, `delete`) yang secara otomatis menyematkan header `Authorization: Bearer <token>` dan memvalidasi respon status code server.
+    - `api_url.dart`: Mengelola dan memusatkan konfigurasi endpoint REST API (`baseUrl`, `/registrasi`, `/login`, `/produk`, dll).
+  - **Lapisan BLoC (`lib/bloc/`):**
+    - `registrasi_bloc.dart`: Menghubungkan proses pendaftaran akun baru dengan endpoint `/registrasi`.
+    - `login_bloc.dart`: Mengirim kredensial login ke endpoint `/login`, memproses token otorisasi, dan memetakan respon ke model `Login`.
+    - `logout_bloc.dart`: Menjalankan alur pembersihan data sesi lokal saat pengguna keluar dari aplikasi.
+    - `produk_bloc.dart`: Menangani seluruh alur data produk secara terpusat: `getProduks` (mengambil list produk), `addProduk` (menambah produk), `updateProduk` (mengubah data produk), dan `deleteProduk` (menghapus produk dari server).
+  - **Komponen Dialog Umpan Balik (`lib/widget/`):**
+    - `success_dialog.dart`: Menampilkan dialog modal konfirmasi dengan teks hijau tebal **SUKSES** dan tombol aksi **OK**.
+    - `warning_dialog.dart`: Menampilkan dialog modal peringatan dengan teks merah tebal **GAGAL** saat validasi atau request API tidak berhasil.
+  - **Integrasi Antarmuka Pengguna & Navigasi (`lib/ui/` & `main.dart`):**
+    - `main.dart`: Pengecekan otomatis sesi login pengguna (`isLogin()`) saat aplikasi dibuka, langsung mengarahkan ke `ProdukPage` jika token tersedia atau ke `LoginPage` jika belum terautentikasi.
+    - `registrasi_page.dart`: Form pendaftaran yang terhubung ke `RegistrasiBloc`, menampilkan `SuccessDialog` saat pendaftaran berhasil dan mengembalikan pengguna ke halaman login.
+    - `login_page.dart`: Form login yang terintegrasi ke `LoginBloc`, menyimpan token ke `UserInfo`, dan menampilkan `WarningDialog` saat autentikasi gagal.
+    - `produk_page.dart`: Menampilkan katalog data secara dinamis dari server menggunakan `FutureBuilder<List<Produk>>`, tombol tambah (`+`), dan drawer navigasi dengan fungsi `Logout`.
+    - `produk_form.dart`: Form cerdas yang mendukung operasi penambahan produk baru maupun pengubahan data produk yang sudah ada ke server API.
+    - `produk_detail.dart`: Menampilkan rincian produk, tombol **EDIT** untuk membuka form ubah, dan tombol **DELETE** dengan dialog konfirmasi hapus data yang memanggil `ProdukBloc.deleteProduk`.
+
+### Struktur Folder
+```text
+lib/
+├── main.dart
+├── bloc/
+│   ├── login_bloc.dart
+│   ├── logout_bloc.dart
+│   ├── produk_bloc.dart
+│   └── registrasi_bloc.dart
+├── helpers/
+│   ├── api.dart
+│   ├── api_url.dart
+│   ├── app_exception.dart
+│   └── user_info.dart
+├── model/
+│   ├── login.dart
+│   ├── produk.dart
+│   └── registrasi.dart
+├── ui/
+│   ├── login_page.dart
+│   ├── produk_detail.dart
+│   ├── produk_form.dart
+│   ├── produk_page.dart
+│   └── registrasi_page.dart
+└── widget/
+    ├── success_dialog.dart
+    └── warning_dialog.dart
+```
+
+### Kredensial Pengujian (Testing)
+* **Akun Login Terdaftar:**
+  * **Email**: `adehendini@gmail.com`
+  * **Password**: `123456`
+* **Registrasi Pengguna Baru:**
+  * **Nama**: `Siti Aulia Febriana`
+  * **Email**: `aulia@gmail.com`
+  * **Password**: `123456`
+  * **Konfirmasi Password**: `123456`
+
+### Cara Menjalankan
+1. Pastikan server Apache & MySQL pada Laragon sudah aktif (**Start All**).
+2. Sesuaikan konfigurasi `baseUrl` pada `lib/helpers/api_url.dart`:
+   - Android Emulator: `http://10.0.2.2/toko-api/public`
+   - HP Fisik: `http://192.168.0.114/toko-api/public`
+3. Jalankan aplikasi Flutter:
+```bash
+flutter pub get
+flutter run
+```
+
+### Hasil / Screenshot
+<img width="716" height="1600" alt="image" src="https://github.com/user-attachments/assets/be1bda45-6ed5-41c3-aabe-fa539fee3742" />
+<img width="716" height="1600" alt="image" src="https://github.com/user-attachments/assets/108f4c8f-c147-4310-85eb-554bb9c9f804" />
+<img width="716" height="1600" alt="image" src="https://github.com/user-attachments/assets/6ed7e9cb-b5c0-4284-8614-d397985b239b" />
+
+
+### Kesimpulan Praktikum
+Pertemuan kelima memberikan pemahaman menyeluruh tentang pemisahan arsitektur aplikasi Flutter yang bersih melalui pola BLoC dan lapisan Helper, pengelolaan siklus hidup sesi otentikasi berbasis Bearer Token dengan `SharedPreferences`, penanganan eksepsi jaringan HTTP secara modular dan terpusat, pembuatan komponen antarmuka dialog umpan balik yang konsisten, serta keberhasilan pengintegrasian alur operasi CRUD secara penuh antara aplikasi Flutter dengan server RESTful API.
