@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tokokita/bloc/login_bloc.dart';
+import 'package:tokokita/helpers/user_info.dart';
 import 'package:tokokita/ui/produk_page.dart';
 import 'package:tokokita/ui/registrasi_page.dart';
+import 'package:tokokita/widget/warning_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,7 +14,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  // ignore: unused_field, prefer_final_fields
   bool _isLoading = false;
 
   final _emailTextboxController = TextEditingController();
@@ -25,18 +27,16 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
                 _emailTextField(),
                 _passwordTextField(),
-                const SizedBox(height: 15),
+                const SizedBox(height: 24),
                 _buttonLogin(),
-                const SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 _menuRegistrasi(),
               ],
             ),
@@ -53,7 +53,6 @@ class _LoginPageState extends State<LoginPage> {
       keyboardType: TextInputType.emailAddress,
       controller: _emailTextboxController,
       validator: (value) {
-        // validasi harus diisi
         if (value!.isEmpty) {
           return 'Email harus diisi';
         }
@@ -70,7 +69,6 @@ class _LoginPageState extends State<LoginPage> {
       obscureText: true,
       controller: _passwordTextboxController,
       validator: (value) {
-        // jika karakter yang dimasukkan kurang dari 6 karakter
         if (value!.isEmpty) {
           return "Password harus diisi";
         }
@@ -79,20 +77,56 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Membuat Tombol Login
+  // Membuat Tombol Login (Abu-abu rounded sesuai screenshot)
   Widget _buttonLogin() {
     return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFFE0E0E0),
+        foregroundColor: Colors.black,
+        elevation: 1,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+      ),
       child: const Text("Login"),
       onPressed: () {
         var validate = _formKey.currentState!.validate();
         if (validate) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const ProdukPage()),
-          );
+          if (!_isLoading) _submit();
         }
       },
     );
+  }
+
+  void _submit() {
+    _formKey.currentState!.save();
+    setState(() {
+      _isLoading = true;
+    });
+    LoginBloc.login(
+      email: _emailTextboxController.text,
+      password: _passwordTextboxController.text,
+    ).then((value) async {
+      await UserInfo().setToken(value.token.toString());
+      await UserInfo().setUserID(int.parse(value.userID.toString()));
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const ProdukPage()),
+      );
+    }, onError: (error) {
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => const WarningDialog(
+          description: "Login gagal, silahkan coba lagi",
+        ),
+      );
+    });
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   // Membuat menu untuk membuka halaman registrasi
@@ -101,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
       child: InkWell(
         child: const Text(
           "Registrasi",
-          style: TextStyle(color: Colors.blue),
+          style: TextStyle(color: Color(0xFF1E88E5), fontSize: 14),
         ),
         onTap: () {
           Navigator.push(
