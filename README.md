@@ -248,9 +248,6 @@ lib/
 ```
 
 ### Kredensial Pengujian (Testing)
-* **Akun Login Terdaftar:**
-  * **Email**: `adehendini@gmail.com`
-  * **Password**: `123456`
 * **Registrasi Pengguna Baru:**
   * **Nama**: `Siti Aulia Febriana`
   * **Email**: `aulia@gmail.com`
@@ -272,6 +269,7 @@ flutter run
 <img width="716" height="1600" alt="image" src="https://github.com/user-attachments/assets/be1bda45-6ed5-41c3-aabe-fa539fee3742" />
 <img width="716" height="1600" alt="image" src="https://github.com/user-attachments/assets/108f4c8f-c147-4310-85eb-554bb9c9f804" />
 <img width="716" height="1600" alt="image" src="https://github.com/user-attachments/assets/6ed7e9cb-b5c0-4284-8614-d397985b239b" />
+<img width="716" height="1600" alt="image" src="https://github.com/user-attachments/assets/66949f07-333b-4b73-a063-a613b3a4a759" />
 
 
 ### Kesimpulan Praktikum
