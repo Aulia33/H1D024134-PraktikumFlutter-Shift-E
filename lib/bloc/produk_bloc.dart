@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:tokokita/helpers/api.dart';
 import 'package:tokokita/helpers/api_url.dart';
 import 'package:tokokita/model/produk.dart';
@@ -22,7 +23,7 @@ class ProdukBloc {
     var body = {
       "kode_produk": produk!.kodeProduk,
       "nama_produk": produk.namaProduk,
-      "harga": produk.hargaProduk.toString()
+      "harga": produk.hargaProduk.toString(),
     };
 
     var response = await Api().post(apiUrl, body);
@@ -36,11 +37,14 @@ class ProdukBloc {
     var body = {
       "kode_produk": produk.kodeProduk,
       "nama_produk": produk.namaProduk,
-      "harga": produk.hargaProduk.toString()
+      "harga": produk.hargaProduk.toString(),
     };
     var response = await Api().post(apiUrl, body);
     var jsonObj = json.decode(response.body);
-    return jsonObj['data'];
+    if (jsonObj['data'] is bool) {
+      return jsonObj['data'];
+    }
+    return jsonObj['status'] == true;
   }
 
   static Future<bool> deleteProduk({int? id}) async {
