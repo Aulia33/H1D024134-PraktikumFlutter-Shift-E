@@ -73,6 +73,8 @@ flutter run
 
 Pertemuan kedua memberikan pemahaman tentang penggunaan widget dasar di Flutter, perbedaan `StatelessWidget` dan `StatefulWidget`, pengelolaan form input, navigasi antar halaman, serta penyusunan daftar item menggunakan `ListView`.
 
+---
+
 ## 📝 Tugas Pertemuan 3: Routes, Side Menu, Login dan Local Storage
 **Tanggal**: Rabu, 4 November 2026
 
@@ -134,6 +136,8 @@ flutter run
 ### Kesimpulan Praktikum
 Pertemuan ketiga memberikan pemahaman mendalam mengenai pembuatan sistem autentikasi sederhana pada Flutter, penggunaan `shared_preferences` untuk menyimpan dan membaca data lokal perangkat, implementasi dialog interaktif (`AlertDialog`), serta pembuatan navigasi hierarkis dan menu drawer samping (`Drawer` & `ListTile`) untuk menghubungkan berbagai halaman aplikasi.
 
+---
+
 ## 📝 Tugas Pertemuan 4: Operasi CRUD dengan API CodeIgniter 4 & Flutter Tokokita
 **Tanggal:** Rabu, 11 November 2026
 
@@ -187,6 +191,8 @@ flutter run
 
 ### Kesimpulan Praktikum
 Pertemuan keempat memberikan pemahaman menyeluruh tentang integrasi sistem client-server, perancangan RESTful API menggunakan framework CodeIgniter 4, perancangan basis data relasional untuk sistem autentikasi dan inventaris, pemetaan data JSON ke model Dart, penerapan validasi form komposit pada Flutter, serta perancangan antarmuka mobile multi-halaman untuk alur operasi CRUD (Create, Read, Update, Delete) yang dinamis dan terstruktur.
+
+---
 
 ## 📝 Tugas Pertemuan 5: CRUD Module Flutter Bagian 2 (Helper, BLoC, HTTP Request, & Full REST API Integration)
 **Tanggal:** Rabu, 18 November 2026
